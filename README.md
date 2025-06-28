@@ -1,4 +1,4 @@
-# GOD, a language for *good ol' data*: specification version 0.0.1
+# GOD, a language for *good ol' data*
 Data serialization can be better, without being too much.
 
 ```nix
@@ -63,20 +63,66 @@ Data serialization can be better, without being too much.
 }
 ```
 
-## Why
-As someone who has found themself needing to write, and also programatically work with data serialization, I wanted a better way. I tried many formats: JSON, Yaml, Toml, CSV, XML, KDL, Lua tables, Java properties, and others. You name it, I tried it. Many of them had enough nagging issues to cause motivation in me to find a better format, which never came.
-
-### "But JSON works fine"
-For those that may need a data serialization format, but never (or rarely) have to deal directly with the data in its storage format, it may seems like nit-picking; however it becomes different when you find yourself manually writing in these formats.  
+---
+**Table of Contents**
++ [Why?](#a-why)
++ [Background](#a-background)
+  + [Benefits](#a-background-benefits)
++ [Specification](#a-specification)
+  + [Values](#a-values)
+    + [Strings](#a-values-strings)
+    + [Numbers](#a-values-numbers)
+    + [Booleans](#a-values-booleans)
+    + [Null](#a-values-null)
+    + [Maps](#a-values-maps)
+      + [Variations](#a-values-maps-variations)
+        + [Contiguous](#a-values-maps-variations)
+        + [Non-contiguous](#a-values-maps-variations)
+        + [Both](#a-values-maps-both)
+    + [Lists](#a-values-lists)
+    + [Elements](#a-values-elements)
+  + [Structure](#a-structure)
+    + [Document](#a-structure-document)
+    + [Operators](#a-structure-operators)
+      + [Selection](#a-structure-operators-selection)
+      + [Termination](#a-structure-operators-termination)
+    + [Identifiers](#a-structure-identifiers)
+    + [Fields](#a-structure-fields)
+    + [Whitespace](#a-structure-whitespace)
+      + [Comments](#a-structure-whitespace-comments)
 
 ---
-# Origin
-If you feel that *GOD* syntax is familiar, that's probably because *it is*. *GOD* isn't a new syntax; it is derived directly from the [Nix](https://nixos.org) programming language. Any valid *GOD* code can be validated directly by Nix, with `nix eval -f file.god`. I saw no need to create a new language when I realized Nix had exactly the *bones* needed to derive a flexible (and easy to understand) data serialization text format. Therefore, *GOD* is a subset of Nix which omits it's programming syntax and features in favor of static data representation.
+</a id="a-why">
+## Why
+As someone who has found themself needing to manually write and programatically 
+work with data serialization formats, I wanted a better way. I tried many 
+formats: JSON, YAML, TOML, CSV, XML, KDL, Lua tables, Java properties, and 
+others. You name it, I tried it. Many of them had enough nagging issues to 
+cause motivation in me to find a better format, which never arose. 
 
+### *"But JSON works fine"*
+Have you ever been in the position of *writing* JSON, rather than just having a 
+library parse it? If you haven't; then yes that's a logical conclusion. Personally, 
+I find myself in a position where I need to write data manually, and many of the 
+popular formats make that experience have more friction than it should. 
+For those that may need a data serialization format, but never (or rarely) have 
+to deal directly with the data in its storage format, it may seems like nit-picking; 
+however it becomes different when you find yourself manually writing in these formats.
+
+---
+</a id="a-background">
+# Background
+If you feel that *GOD* syntax is familiar, that's probably because *it is*. *GOD* 
+isn't a new syntax; it is derived directly from the [Nix](https://nixos.org) programming language. 
+Any valid *GOD* code can be validated directly by Nix, with `nix eval -f file.god`. I saw no need 
+to create a new language when I realized Nix had exactly the *bones* needed to derive a flexible 
+(and easy to understand) data serialization format. *GOD* is a subset of Nix which omits it's 
+programming syntax and features in favor of static data representation. 
+</a id="a-backgound-benefits">
 Some of the benefits include:
-+ can be validated by `nix`  
-+ can be converted to [JSON](https://json.org) with `nix`
-+ A number of existing tools for working with Nix code can be used  
++ It can be validated by `nix`
++ Conversion from *GOD* to [JSON](https://json.org) with `nix`
++ A number of existing tools for working with Nix code can be used
   + a [tree-sitter](https://github.com/nix-community/tree-sitter-nix) grammar
   + linters and formatters such as [statix](https://git.peppe.rs/languages/statix) and [nixfmt](https://github.com/nixos/nixfmt)
   + language servers such as [nixd](https://github.com/nix-community/nixd), [nil](https://github.com/oxalica/nil) and [rnix-lsp](https://github.com/nix-community/rnix-lsp)
@@ -86,18 +132,26 @@ Some of the benefits include:
   + A very thoroughly written [Emacs mode](https://github.com/nixos/nix-mode)
 
 
+</a id="a-specification">
 # Specification
 
+</a id="a-values">
 ## Values
-The value types in *GOD* are intentionally [rudimentary](https://www.dictionary.com/browse/rudimentary), with the goal of being useful to almost any programming language in a basic way. They are flexible and have few restrictions.
+The value types in *GOD* are intentionally [rudimentary](https://www.dictionary.com/browse/rudimentary), 
+with the goal of being useful to almost any programming language. They are flexible and have few restrictions.
 
 ---
+</a id="a-values-strings">
 #### Strings
-These come in two forms: standard and multiline. A standard or regular string is represented by a pair of double quotes with any amount of text inside it.
+These come in two forms: standard and multiline. A standard or regular string is represented by a pair 
+of double quotes with any amount of text inside it.
 ```nix
 greeting = "Hello, how are you?";
 ```
-Multiline strings are denoted by two pairs of double single-quotes (`'' hi ''`). They represent text that spans across multiple lines. One subtlety to note, is that the string will be *left justified* to the furthest left line indentation-wise in the string, essentially left trimmed to the left-most part of the string as its' base.
+Multiline strings are denoted by two pairs of double single-quotes (`'' hi ''`). They 
+represent text that may spans across multiple lines. One subtlety to note, is that the string 
+will be *left justified* to the furthest left line (*indentation-wise*) in the string. Essentially 
+trimmed to the left-most part of the string as its' base. 
 ```nix
 greeting = ''
     Hello
@@ -133,6 +187,7 @@ It would be strange if I:
 ```
 
 ---
+</a id="a-values-numbers">
 #### Numbers
 These can represent 64-bit signed integers and [IEEE 754](https://en.wikipedia.org/wiki/IEEE_754) floating point integers
 ```nix
@@ -145,13 +200,15 @@ These can represent 64-bit signed integers and [IEEE 754](https://en.wikipedia.o
     pi-negative = -3.13159;
 }
 ```
-As in Nix, floats are able to represent up to 64 bits of precision; which is typically enough for most applications. Any number (float or integer) which is not correctly represented in Nix, would not be correctly represented in *GOD* by extension.
-
-This could be worked around at the implementation/application level by wrapping the value as a string when you're certain your programming language can properly handle such values.
+As in Nix, floats are able to represent up to 64 bits of precision; which is typically 
+enough for most applications. Any number (float or integer) which is not correctly 
+represented in Nix, would not be correctly represented in *GOD* by extension. 
 
 ---
+</a id="a-values-booleans">
 #### Booleans
-These are represented as the unquoted keywords `true` and `false`. They are not reserved keywords, meaning they *can* be used as identifiers, though this is discouraged for obvious reasons.
+These are represented as the unquoted keywords `true` and `false`. They are not 
+reserved keywords, meaning they *can* be used as identifiers, though this is discouraged for obvious reasons.
 ```nix
 {
     happy = true;
@@ -163,8 +220,13 @@ These are represented as the unquoted keywords `true` and `false`. They are not 
 ```
 
 ---
+</a id="a-values-booleans">
 #### Null
-This can correlate to a languages' `null` value, or to represent the absence of a value in languages which do no have a `null` type. In some languages it might also be represented by things such as a `false` boolean value, empty string (`""`), zero (`0`) or an empty list (`'()`, such as in lisp-style languages). However this would be an implementation-specific detail.  
+This can correlate to a languages' `null` value, or to represent the absence of a 
+value in languages which do no have a `null` type. In some languages it might also 
+be represented by things such as a `false` boolean value, empty string (`""`), 
+zero (`0`) or an empty list (`'()`, such as in lisp-style languages). However 
+this would be an implementation-specific detail.  
 ```nix
 {
     name = "Will";
@@ -185,8 +247,15 @@ This can correlate to a languages' `null` value, or to represent the absence of 
 ```
 
 ---
+</a id="a-values-maps">
 #### Maps
-A data structure which is known by many names in different languages. Lua [tables](https://www.lua.org/pil/2.5.html), Python [dictionaries](https://docs.python.org/3/tutorial/datastructures.html#dictionaries), Perl [hashes](https://perldoc.perl.org/perldata#DESCRIPTION), Javascript [object literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Working_with_objects), Lisp and Scheme's [association lists](https://standards.scheme.org/corrected-r7rs/r7rs-Z-H-8.html#TAG:__tex2page_sec_6.4). The commonality is the structure of an identifier which is assigned a group of fields.  
+A data structure which is known by many names in different languages. 
+Lua [tables](https://www.lua.org/pil/2.5.html), 
+Python [dictionaries](https://docs.python.org/3/tutorial/datastructures.html#dictionaries), 
+Perl [hashes](https://perldoc.perl.org/perldata#DESCRIPTION), 
+Javascript [objects](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Working_with_objects), 
+Lisp and Scheme [association lists](https://standards.scheme.org/corrected-r7rs/r7rs-Z-H-8.html#TAG:__tex2page_sec_6.4). 
+The commonality is the structure of an identifier which is assigned a group of fields.  
 ```nix
 {
     self = {
@@ -209,7 +278,9 @@ A data structure which is known by many names in different languages. Lua [table
     };
 }
 ```
-Some languages allow identifiers being used more than once in their form of a map, with the last occurence determining its' value; However this is not valid in Nix-- and by extension, here.
+Some languages allow identifiers being used more than once in their form of a map, 
+with the last occurence determining its' value; However this is not valid in 
+Nix-- and by extension, here.
 ```nix
 {
     self = {
@@ -224,9 +295,11 @@ Some languages allow identifiers being used more than once in their form of a ma
     self.age = 25;
 }
 ```
-##### Map variations
+</a id="a-values-maps-variations">
+##### variations
 Maps can be written in three ways; *contiguous*, *non-contiguous*, or both.
 
+</a id="a-values-maps-variations-contiguous">
 ###### Contiguous
 ```nix
 {
@@ -237,6 +310,7 @@ Maps can be written in three ways; *contiguous*, *non-contiguous*, or both.
     };
 }
 ```
+</a id="a-values-maps-variations-non-contiguous">
 ###### Non-contiguous
 
 ```nix
@@ -246,8 +320,9 @@ Maps can be written in three ways; *contiguous*, *non-contiguous*, or both.
     person.friends = null;
 }
 ```
+</a id="a-values-maps-variations-both">
 ###### Both
-Note that this only is valid in "forward" (left -> right -> top -> bottom) direction.  
+Note that this only is valid in "forward" (left  right :: top  bottom) direction.  
 The following **is** valid:
 ```nix
 {
@@ -270,8 +345,13 @@ Wheras the following is **not** valid, because it is interpreted as `person` bei
 }
 ```
 ---
+</a id="a-values-lists">
 #### Lists
-These are groups consisting of *[elements](#elements)*. The entire entity may be the value of a [field](#fields) or nested within another list as one of the its' elements. They are not strict about their elements' types, meaning they can contain any number of valid values. The contained elements are separated by any combination of [whitespace](#whitespace)
+These are groups consisting of **[elements](#elements)**. The entire entity may 
+be the value of a [field](#fields) or nested within another list as one of the 
+its' elements. They are not strict about their elements' types, meaning they can 
+contain any number of valid values. The contained elements are separated 
+by any combination of [whitespace](#whitespace)
 ```nix
 {
     favorite-foods = [
@@ -298,7 +378,7 @@ These are groups consisting of *[elements](#elements)*. The entire entity may be
             message = "I'm inside a list!";
             more = ''
             So I still adhere to the normal
-            field termination rules!
+                field termination rules!
             '';
             my-list = [
                 "Hi!"
@@ -315,20 +395,33 @@ These are groups consisting of *[elements](#elements)*. The entire entity may be
 }
 ```
 
+---
+</a id="a-values-elements">
 #### Elements
-These are **values** within **lists**. They are not associated with an identifier, only implicitly associated to their index in the list. Elements can be strings, numbers, booleans, null, maps or lists. Elements may *NOT* be [fields](#fields) however, [maps](#maps) contained within lists; by definition, have fields, and still adhere to the normal rules of **[field termination](#termination-operator)** within thier scope.
+These are [values](#values) within [lists](#lists). They are not associated with an identifier, 
+only implicitly associated to their index in the list. Elements can be strings, numbers, booleans, 
+null, maps or lists. Elements may *NOT* be [fields](#fields) however, [maps](#maps) contained 
+within lists; by definition, have fields, and still adhere to the normal rules of 
+**[field termination](#termination-operator)** within thier scope.
 
 ---
+</a id="a-structure">
 ## Structure
-
+</a id="a-structure-document">
 ### Document
-Similar to formats like JSON, the top (outer-most) level of a **GOD** file is a pair of opening and closing braces `{  }`, which we will call the *document*. Within, [fields](#fields) are allowed in any order, with any valid values at any depth. In representation, it is semantically equivalent to a [map](#maps)-type [element](#elements)
+Similar to formats like JSON, the top (outer-most) level of a **GOD** file is a pair of opening and closing *"curly"* braces `{  }`, 
+which we will call the *document*. Within, [fields](#fields) are allowed in any order, with any valid 
+values at any depth. In representation, it is semantically equivalent to a [map](#maps)-type [element](#elements)
 
 ---
+</a id="a-structure-operators">
 ### Operators
 
+</a id="a-structure-operators-selection">
 #### Selection operator
-The use of a period (`.`) in an identifier is used to selectively traverse map hierarchy. The part of the identifier prefixing the selection operator is considered a [map](#maps), and the postfix *(or postfixes)* are the [identifiers](#identifiers) of the maps' [fields](#fields).
+The use of a period (`.`) in an identifier is used to selectively traverse map hierarchy. The part 
+of the identifier prefixing the selection operator is considered a [map](#maps), and the postfix 
+*(or postfixes)* are the [identifiers](#identifiers) of the maps' [fields](#fields).
 ```nix
 {
     # the following:
@@ -344,6 +437,8 @@ The use of a period (`.`) in an identifier is used to selectively traverse map h
     movies.horror.period-piece = [ "The Witch" "The Lighthouse" ];
 }
 ```
+
+</a id="a-structure-operators-termination">
 #### Termination operator
 All fields **must** have a `;` (semicolon) to terminate its' scope.
 
@@ -351,22 +446,22 @@ All fields **must** have a `;` (semicolon) to terminate its' scope.
 - simple assignments: `name = "Will";`
 - list assignments: `list = [];`
 
-**NOTE**: The **[document](#document)** is *not* a field, and therefore has no field terminator.
+**NOTE**: The [document](#document) is *not* a field, and therefore has no field terminator.
 
 ---
+</a id="a-structure-identifiers">
 ### Identifiers
 Non-quoted string values denoting the *name* or *identity* of a field.  
 These are the rules for identifiers:
-##### Identifiers may **NOT**:
+##### Identifiers **MAY NOT**:
 + __contain__ the following symbols
   + ``% $ @ ! ^ & * " ` ~ + = , ? < > \ / ( ) [ ] { } ;``
 + __begin__ with the following symbols
   + `. '`
 ##### Identifiers **MAY**:
-- contain and be suffixed by (non-paired) single quote characters
-- contain and be suffixed by hyphens and underscores
-- contain (but not *begin* or *end* with) periods, as the [selection operator](#selection-operator).
-
++ contain and be suffixed by (non-paired) single quote characters
++ contain and be suffixed by hyphens and underscores
++ contain (but not **begin** or **end** with) periods, as the [selection operator](#selection-operator).
 ```nix
 {
     # containing hyphens/underscores
@@ -393,8 +488,11 @@ These are the rules for identifiers:
 }
 ```
 
+---
+</a id="a-structure-fields">
 ### Fields
-These consist of an [identifier](#identifiers) and their assigned value. Anything that is not a [document](#document) or [element](#elements), is a field.  
+These consist of an [identifier](#identifiers) and their assigned value. Anything that isn't a [document](#document), 
+[element](#elements), [operator](#operators) or [whitespace](#whitespace) is a field.
 ```nix
 name = "Will";
 hobbies = [ "programming" "movies" "music" ];
@@ -403,7 +501,9 @@ physical = {
     height = "6'2\"";
 };
 ```
-In this example, the following are *all* fields, each one comprising the fields' identifier and assigned value. Note the selective omission of the semicolon [field terminators](#termination-operator) in this list, as they aren't part of the field itself; they are an [operator](#operators).
+In this example, the following are *all* fields, each one comprising the fields' 
+identifier and assigned value. Note the selective omission of the semicolon 
+[field terminators](#termination-operator) in this list, as they aren't part of the field itself; they are an [operator](#operators).
 + `name = "Will"`
 + `hobbies = [ "programming" "movies" "music" ]`
 + `physical = { age = 26; height = "6'2\""; }`
@@ -419,6 +519,7 @@ In this example, the following are *all* fields, each one comprising the fields'
 | height     | `"6'2\""`                          |
 
 ---
+</a id="a-structure-whitespace">
 ### Whitespace
 All of the following are considered "whitespace" in a *GOD* file:
 + space characters `\x20`
@@ -430,6 +531,7 @@ All of the following are considered "whitespace" in a *GOD* file:
 + record separator (RS) `\036`
 + [comments](#comments)
 
+</a id="a-structure-whitespace-comments">
 #### Comments
 In addition to omitting the programming features of Nix, we also ***only*** support one form of comments in __GOD__: _full_ line comments.
 ```nix
@@ -454,7 +556,19 @@ The following comments (which are valid in Nix), are __*NOT*__ valid in *GOD*:
     ];
 }
 ```
-When parsing *GOD*, encountering a line containing whitespace with its' first character being an *octothorpe* `#`, the remainder of the line is considered whitespace and is ignored.
+When parsing *GOD*, encountering a line containing whitespace with its' first character being 
+an *octothorpe* `#`, the remainder of the line is considered whitespace and is ignored.
 
 #### Reasoning
-This was an intentional choice. In the authors' opinion, this can make parsing easier and faster (in terms of performace and development time) for implementations of the spec, without sacrificing usability for those writing the serialized data. Anything that can be conveyed by multiline, inline and sub-line comments can be achieved well enough with full line comments.
+This was an intentional choice. In the authors' opinion, this can make parsing easier and 
+faster (in terms of performace and development time) for implementations of the spec, without 
+sacrificing usability for those writing the serialized data. Anything that can be conveyed by 
+multiline, inline and sub-line comments can be achieved well enough with full line comments.
+
+## License
+**GOD** (the specification) is licensed under the the GNU Free Documentation License, version 1.3. 
+Being that this is only the *specification*, this doesn't place any restrictions on implementing it. 
+Any contributions (or derivatives; of the specification, not the language or its' implementation) 
+to this document/repository must also be licensed under the FDL 1.3. This does not 
+mean using the *GOD* language or implementing it, the FDL 1.3 terms apply to this repository 
+and document alone.
