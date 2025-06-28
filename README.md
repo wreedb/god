@@ -78,7 +78,7 @@ Data serialization can be better, without being too much.
       + [Variations](#a-values-maps-variations)
         + [Contiguous](#a-values-maps-variations)
         + [Non-contiguous](#a-values-maps-variations)
-        + [Both](#a-values-maps-both)
+        + [Both](#a-values-maps-variations-both)
     + [Lists](#a-values-lists)
     + [Elements](#a-values-elements)
   + [Structure](#a-structure)
