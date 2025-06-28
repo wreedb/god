@@ -92,7 +92,7 @@ Data serialization can be better, without being too much.
       + [Comments](#a-structure-whitespace-comments)
 
 ---
-</a id="a-why">
+<a id="a-why"></a>
 ## Why
 As someone who has found themself needing to manually write and programatically 
 work with data serialization formats, I wanted a better way. I tried many 
@@ -110,7 +110,7 @@ to deal directly with the data in its storage format, it may seems like nit-pick
 however it becomes different when you find yourself manually writing in these formats.
 
 ---
-</a id="a-background">
+<a id="a-background"></a>
 # Background
 If you feel that *GOD* syntax is familiar, that's probably because *it is*. *GOD* 
 isn't a new syntax; it is derived directly from the [Nix](https://nixos.org) programming language. 
@@ -118,7 +118,7 @@ Any valid *GOD* code can be validated directly by Nix, with `nix eval -f file.go
 to create a new language when I realized Nix had exactly the *bones* needed to derive a flexible 
 (and easy to understand) data serialization format. *GOD* is a subset of Nix which omits it's 
 programming syntax and features in favor of static data representation. 
-</a id="a-backgound-benefits">
+<a id="a-backgound-benefits"></a>
 Some of the benefits include:
 + It can be validated by `nix`
 + Conversion from *GOD* to [JSON](https://json.org) with `nix`
@@ -132,16 +132,16 @@ Some of the benefits include:
   + A very thoroughly written [Emacs mode](https://github.com/nixos/nix-mode)
 
 
-</a id="a-specification">
+<a id="a-specification"></a>
 # Specification
 
-</a id="a-values">
+<a id="a-values"></a>
 ## Values
 The value types in *GOD* are intentionally [rudimentary](https://www.dictionary.com/browse/rudimentary), 
 with the goal of being useful to almost any programming language. They are flexible and have few restrictions.
 
 ---
-</a id="a-values-strings">
+<a id="a-values-strings"></a>
 #### Strings
 These come in two forms: standard and multiline. A standard or regular string is represented by a pair 
 of double quotes with any amount of text inside it.
@@ -187,7 +187,7 @@ It would be strange if I:
 ```
 
 ---
-</a id="a-values-numbers">
+<a id="a-values-numbers"></a>
 #### Numbers
 These can represent 64-bit signed integers and [IEEE 754](https://en.wikipedia.org/wiki/IEEE_754) floating point integers
 ```nix
@@ -205,7 +205,7 @@ enough for most applications. Any number (float or integer) which is not correct
 represented in Nix, would not be correctly represented in *GOD* by extension. 
 
 ---
-</a id="a-values-booleans">
+<a id="a-values-booleans"></a>
 #### Booleans
 These are represented as the unquoted keywords `true` and `false`. They are not 
 reserved keywords, meaning they *can* be used as identifiers, though this is discouraged for obvious reasons.
@@ -220,7 +220,7 @@ reserved keywords, meaning they *can* be used as identifiers, though this is dis
 ```
 
 ---
-</a id="a-values-booleans">
+<a id="a-values-booleans"></a>
 #### Null
 This can correlate to a languages' `null` value, or to represent the absence of a 
 value in languages which do no have a `null` type. In some languages it might also 
@@ -247,7 +247,7 @@ this would be an implementation-specific detail.
 ```
 
 ---
-</a id="a-values-maps">
+<a id="a-values-maps"></a>
 #### Maps
 A data structure which is known by many names in different languages. 
 Lua [tables](https://www.lua.org/pil/2.5.html), 
@@ -295,12 +295,14 @@ Nix-- and by extension, here.
     self.age = 25;
 }
 ```
-</a id="a-values-maps-variations">
+
+<a id="a-values-maps-variations"></a>
 ##### variations
 Maps can be written in three ways; *contiguous*, *non-contiguous*, or both.
 
-</a id="a-values-maps-variations-contiguous">
+<a id="a-values-maps-variations-contiguous"></a>
 ###### Contiguous
+
 ```nix
 {
     person = {
@@ -310,7 +312,8 @@ Maps can be written in three ways; *contiguous*, *non-contiguous*, or both.
     };
 }
 ```
-</a id="a-values-maps-variations-non-contiguous">
+
+<a id="a-values-maps-variations-non-contiguous"></a>
 ###### Non-contiguous
 
 ```nix
@@ -320,7 +323,7 @@ Maps can be written in three ways; *contiguous*, *non-contiguous*, or both.
     person.friends = null;
 }
 ```
-</a id="a-values-maps-variations-both">
+<a id="a-values-maps-variations-both"></a>
 ###### Both
 Note that this only is valid in "forward" (left  right :: top  bottom) direction.  
 The following **is** valid:
@@ -345,7 +348,7 @@ Wheras the following is **not** valid, because it is interpreted as `person` bei
 }
 ```
 ---
-</a id="a-values-lists">
+<a id="a-values-lists"></a>
 #### Lists
 These are groups consisting of **[elements](#elements)**. The entire entity may 
 be the value of a [field](#fields) or nested within another list as one of the 
@@ -396,7 +399,7 @@ by any combination of [whitespace](#whitespace)
 ```
 
 ---
-</a id="a-values-elements">
+<a id="a-values-elements"></a>
 #### Elements
 These are [values](#values) within [lists](#lists). They are not associated with an identifier, 
 only implicitly associated to their index in the list. Elements can be strings, numbers, booleans, 
@@ -405,19 +408,19 @@ within lists; by definition, have fields, and still adhere to the normal rules o
 **[field termination](#termination-operator)** within thier scope.
 
 ---
-</a id="a-structure">
+<a id="a-structure"></a>
 ## Structure
-</a id="a-structure-document">
+<a id="a-structure-document"></a>
 ### Document
 Similar to formats like JSON, the top (outer-most) level of a **GOD** file is a pair of opening and closing *"curly"* braces `{  }`, 
 which we will call the *document*. Within, [fields](#fields) are allowed in any order, with any valid 
 values at any depth. In representation, it is semantically equivalent to a [map](#maps)-type [element](#elements)
 
 ---
-</a id="a-structure-operators">
+<a id="a-structure-operators"></a>
 ### Operators
 
-</a id="a-structure-operators-selection">
+<a id="a-structure-operators-selection"></a>
 #### Selection operator
 The use of a period (`.`) in an identifier is used to selectively traverse map hierarchy. The part 
 of the identifier prefixing the selection operator is considered a [map](#maps), and the postfix 
@@ -438,7 +441,7 @@ of the identifier prefixing the selection operator is considered a [map](#maps),
 }
 ```
 
-</a id="a-structure-operators-termination">
+<a id="a-structure-operators-termination"></a>
 #### Termination operator
 All fields **must** have a `;` (semicolon) to terminate its' scope.
 
@@ -449,7 +452,7 @@ All fields **must** have a `;` (semicolon) to terminate its' scope.
 **NOTE**: The [document](#document) is *not* a field, and therefore has no field terminator.
 
 ---
-</a id="a-structure-identifiers">
+<a id="a-structure-identifiers"></a>
 ### Identifiers
 Non-quoted string values denoting the *name* or *identity* of a field.  
 These are the rules for identifiers:
@@ -489,7 +492,7 @@ These are the rules for identifiers:
 ```
 
 ---
-</a id="a-structure-fields">
+<a id="a-structure-fields"></a>
 ### Fields
 These consist of an [identifier](#identifiers) and their assigned value. Anything that isn't a [document](#document), 
 [element](#elements), [operator](#operators) or [whitespace](#whitespace) is a field.
@@ -519,7 +522,7 @@ identifier and assigned value. Note the selective omission of the semicolon
 | height     | `"6'2\""`                          |
 
 ---
-</a id="a-structure-whitespace">
+<a id="a-structure-whitespace"></a>
 ### Whitespace
 All of the following are considered "whitespace" in a *GOD* file:
 + space characters `\x20`
@@ -531,7 +534,7 @@ All of the following are considered "whitespace" in a *GOD* file:
 + record separator (RS) `\036`
 + [comments](#comments)
 
-</a id="a-structure-whitespace-comments">
+<a id="a-structure-whitespace-comments"></a>
 #### Comments
 In addition to omitting the programming features of Nix, we also ***only*** support one form of comments in __GOD__: _full_ line comments.
 ```nix
