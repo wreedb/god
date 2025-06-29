@@ -78,7 +78,6 @@ Data serialization can be better, without being too much.
       + [Variations](#a-values-maps-variations)
         + [Contiguous](#a-values-maps-variations)
         + [Non-contiguous](#a-values-maps-variations)
-        + [Both](#a-values-maps-variations-both)
     + [Lists](#a-values-lists)
     + [Elements](#a-values-elements)
   + [Structure](#a-structure)
@@ -298,7 +297,7 @@ Nix-- and by extension, here.
 
 <a id="a-values-maps-variations"></a>
 ##### variations
-Maps can be written in three ways; *contiguous*, *non-contiguous*, or both.
+Maps can be written in two different ways; *contiguous*, *non-contiguous*:
 
 <a id="a-values-maps-variations-contiguous"></a>
 ###### Contiguous
@@ -323,30 +322,8 @@ Maps can be written in three ways; *contiguous*, *non-contiguous*, or both.
     person.friends = null;
 }
 ```
-<a id="a-values-maps-variations-both"></a>
-###### Both
-Note that this only is valid in "forward" (left  right :: top  bottom) direction.  
-The following **is** valid:
-```nix
-{
-    person = {
-        name = "Will";
-        friends = null;
-    };
-    person.age = 26;
-}
-```
-Wheras the following is **not** valid, because it is interpreted as `person` being defined twice.
-```nix
-{
-    person.age = 26;
-    # ERROR: person already defined
-    person = {
-        name = "Will";
-        friends = null;
-    };
-}
-```
+**NOTE**: the two approaches cannot be mixed.
+
 ---
 <a id="a-values-lists"></a>
 #### Lists
