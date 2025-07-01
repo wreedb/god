@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - spec change: Only allow contiguous or non-contiguous map variants.
+- README.md: reduce code example indentation to 2 spaces for page-spacing reasons
 
 ### Added
 - this CHANGELOG.md.

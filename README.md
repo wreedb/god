@@ -3,63 +3,61 @@ Data serialization can be better, without being too much.
 
 ```nix
 {
-    name = "Will";
-    age = 26;
-    married = false;
+  name = "Will";
+  age = 26;
+  married = false;
 
-    favorite-movies = [
+  favorite-movies = [
+    {
+      title = "Interstellar";
+      starring = [
+        "Matthew McConaughey"
+        "Jessica Chastain"
+        "Anne Hathaway"
+      ];
+      director = "Christopher Nolan";
+      year = 2014;
+    }
+    {
+      title = "Kill Bill: Volume 1";
+      director = "Quinten Tarantino";
+      starring = [
+        { actor = "Uma Thurman"; character = "The Bride"; }
+        { actor = "Lucy Liu"; character = "O-Ren Ishii"; }
+        { actor = "David Carradine"; character = "Bill"; }
+      ];
+      year = 2003;
+    }
+    {
+      title = "The Witch";
+      director = "Robert Eggers";
+      starring = [ "Anya Taylor-Joy" "Ralph Ineson" ];
+      year = 2015;
+    }
+  ];
+  
+  friends = [
+    {
+      name = "Floyd";
+      age = 29;
+      married = true;
+      favorite-movies = [
         {
-            title = "Interstellar";
-            starring = [ "Matthew McConaughey" "Jessica Chastain" "Anne Hathaway" ];
-            director = "Christopher Nolan";
-            year = 2014;
+          title = "The Departed";
+          starring = [ "Leonardo DiCaprio" "Vera Farmiga" "Matt Daemon" ];
+          director = "Martin Scorsese";
+          year = 2006;
         }
         {
-            title = "Kill Bill: Volume 1";
-            director = "Quinten Tarantino";
-            starring = [
-                { actor = "Uma Thurman";     character = "The Bride"; }
-                { actor = "Lucy Liu";        character = "O-Ren Ishii"; }
-                { actor = "David Carradine"; character = "Bill"; }
-            ];
-            year = 2003;
+          title = "Shutter Island";
+          starring = [ "Leonardo DiCaprio" "Mark Ruffalo" ];
+          director = "Martin Scorsese";
+          year = 2010;
         }
-        {
-            title = "The Witch";
-            director = "Robert Eggers";
-            starring = [ "Anya Taylor-Joy" "Ralph Ineson" ];
-            year = 2015;
-        }
-    ];
-    
-    friends = [
-        {
-            name = "Floyd";
-            age = 29;
-            married = true;
-            favorite-movies = [
-                {
-                    title = "The Departed";
-                    starring = [ "Leonardo DiCaprio" "Vera Farmiga" "Matt Daemon" ];
-                    director = "Martin Scorsese";
-                    year = 2006;
-                }
-                {
-                    title = "Training Day";
-                    starring = [ "Denzel Washington" "Ethan Hawke" ];
-                    director = "Antoine Fuqua";
-                    year = 2001;
-                }
-                {
-                    title = "Shutter Island";
-                    starring = [ "Leonardo DiCaprio" "Mark Ruffalo" ];
-                    director = "Martin Scorsese";
-                    year = 2010;
-                }
-            ];
-            friends = [];
-        }
-    ];
+      ];
+      friends = [];
+    }
+  ];
 }
 ```
 
@@ -155,12 +153,12 @@ height = "6'2\"\n";
 These can represent 64-bit signed integers and [IEEE 754](https://en.wikipedia.org/wiki/IEEE_754) floating point integers
 ```nix
 {
-    # integer
-    age = 26;
-    age-negative = -26;
-    # float
-    pi = 3.14159;
-    pi-negative = -3.13159;
+  # integer
+  age = 26;
+  age-negative = -26;
+  # float
+  pi = 3.14159;
+  pi-negative = -3.13159;
 }
 ```
 As in Nix, floats are able to represent up to 64 bits of precision; which is typically 
@@ -174,11 +172,11 @@ These are represented as the unquoted keywords `true` and `false`. They are not
 reserved keywords, meaning they *can* be used as identifiers, though this is discouraged for obvious reasons.
 ```nix
 {
-    happy = true;
-    sad = false;
+  happy = true;
+  sad = false;
 
-    # discouraged, but technically valid
-    false = true;
+  # discouraged, but technically valid
+  false = true;
 }
 ```
 
@@ -192,20 +190,20 @@ zero (`0`) or an empty list (`'()`, such as in lisp-style languages). However
 this would be an implementation-specific detail.  
 ```nix
 {
-    name = "Will";
-    age = 26;
-    friends = [
-        {
-            name = "Floyd";
-            age = 29;
-            friends = null;
-        }
-        {
-            name = "Alice";
-            age = 29;
-            friends = [ { name = "Jada"; age = null; friends = null; } ];
-        }
-    ];
+  name = "Will";
+  age = 26;
+  friends = [
+    {
+      name = "Floyd";
+      age = 29;
+      friends = null;
+    }
+    {
+      name = "Alice";
+      age = 29;
+      friends = [ { name = "Jada"; age = null; friends = null; } ];
+    }
+  ];
 }
 ```
 
@@ -221,24 +219,24 @@ Lisp and Scheme [association lists](https://standards.scheme.org/corrected-r7rs/
 The commonality is the structure of an identifier which is assigned a group of fields.  
 ```nix
 {
-    self = {
-        name = "Will";
-        age = 26;
-        married = false;
-        favorite-songs = [
-            { artist = "Slint"; title = "Nosferatu Man"; }
-            { artist = "OutKast"; title = "Hey Ya!"; }
-        ];
-        best-friend = {
-            name = "Floyd";
-            age = 29;
-            married = true;
-            favorite-songs = [
-                { artist = "Tool"; title = "Lateralus"; }
-                { artist = "Deafheaven"; title = "Dream House"; }
-            ];
-        };
+  self = {
+    name = "Will";
+    age = 26;
+    married = false;
+    favorite-songs = [
+      { artist = "Slint"; title = "Nosferatu Man"; }
+      { artist = "OutKast"; title = "Hey Ya!"; }
+    ];
+    best-friend = {
+      name = "Floyd";
+      age = 29;
+      married = true;
+      favorite-songs = [
+        { artist = "Tool"; title = "Lateralus"; }
+        { artist = "Deafheaven"; title = "Dream House"; }
+      ];
     };
+  };
 }
 ```
 Some languages allow identifiers being used more than once in their form of a map, 
@@ -246,12 +244,12 @@ with the last occurence determining its' value; However this is not valid in
 Nix - and by extension, here.
 ```nix
 {
-    self = {
-        name = "Will";
-        age = 26;
-        # This is an ERROR
-        age = 25;
-    };
+  self = {
+    name = "Will";
+    age = 26;
+    # This is an ERROR
+    age = 25;
+  };
 }
 ```
 ---
@@ -264,44 +262,44 @@ contain any number of valid values. The contained elements are separated
 by any combination of [whitespace](#whitespace)
 ```nix
 {
-    favorite-foods = [
-        "Tacos"
-        "Pasta"
-        "Sandwiches"
-    ];
+  favorite-foods = [
+    "Tacos"
+    "Pasta"
+    "Sandwiches"
+  ];
 
-    favorite-numbers = [ 1 2 3 ];
+  favorite-numbers = [ 1 2 3 ];
 
-    favorite-lists = [
-        [ 1 2 3 ]
-        [ "four" "five" "six" ]
-        [ true false null ]
-    ];
+  favorite-lists = [
+    [ 1 2 3 ]
+    [ "four" "five" "six" ]
+    [ true false null ]
+  ];
 
-    interesting-list = [
-        "Hello!"
-        1984
-        false
-        [ 1998 2025 ]
+  interesting-list = [
+    "Hello!"
+    1984
+    false
+    [ 1998 2025 ]
+    {
+      name = "map";
+      message = "I'm inside a list!";
+      more = ''
+      So I still adhere to the normal
+          field termination rules!
+      '';
+      my-list = [
+        "Hi!"
+        true
         {
-            name = "map";
-            message = "I'm inside a list!";
-            more = ''
-            So I still adhere to the normal
-                field termination rules!
-            '';
-            my-list = [
-                "Hi!"
-                true
-                {
-                    name = "another-map";
-                    message = [ { text = "The nesting knows no limit!"; } 10 false ];
-                }
-                150
-            ];
+          name = "another-map";
+          message = [ { text = "The nesting knows no limit!"; } 10 false ];
         }
-        null
-    ];
+        150
+      ];
+    }
+    null
+  ];
 }
 ```
 
@@ -351,17 +349,17 @@ These are the rules for identifiers:
 + contain and be suffixed by hyphens and underscores
 ```nix
 {
-    # containing hyphens/underscores
-    abc-123 = "fa so la ti do";
-    abc_123 = null;
-        
-    # suffixed by hyphens/underscores
-    abc-123- = "fa so la ti do";
-    abc_123_ = null;
-    
-    # impractical; just for demonstrating capability
-    a'b'c'1'2'3 = "do re mi";
-    a_-_b-'_'-c'1_2-'3' = { crazy = true; };
+  # containing hyphens/underscores
+  abc-123 = "fa so la ti do";
+  abc_123 = null;
+      
+  # suffixed by hyphens/underscores
+  abc-123- = "fa so la ti do";
+  abc_123_ = null;
+  
+  # impractical; just for demonstrating capability
+  a'b'c'1'2'3 = "do re mi";
+  a_-_b-'_'-c'1_2-'3' = { crazy = true; };
 }
 ```
 
@@ -374,8 +372,8 @@ These consist of an [identifier](#identifiers) and their assigned value. Anythin
 name = "Will";
 hobbies = [ "programming" "movies" "music" ];
 physical = {
-    age = 26;
-    height = "6'2\"";
+  age = 26;
+  height = "6'2\"";
 };
 ```
 In this example, the following are *all* fields, each one comprising the fields' 
@@ -413,23 +411,23 @@ In addition to omitting the programming features of Nix, we also ***only*** supp
 ```nix
 # this is a full line comment
 {
-    # this is another full line comment
-    # and another one.
-    name = "Will";
+  # this is another full line comment
+  # and another one.
+  name = "Will";
 }
 ```
 The following comments (which are valid in Nix), are __*NOT*__ valid in *GOD*:
 ```nix
 {
-    name = "Will"; # invalid comment
-    favorite-things = [ "a" "b" "c" /* invalid comment */ 1 2 3 ];
-    friends = [
-        /* invalid
-           multiline
-           'block' comment
-        */
-        { name = "Floyd"; }
-    ];
+  name = "Will"; # invalid comment
+  favorite-things = [ "a" "b" "c" /* invalid comment */ 1 2 3 ];
+  friends = [
+    /* invalid
+       multiline
+       'block' comment
+    */
+    { name = "Floyd"; }
+  ];
 }
 ```
 When parsing *GOD*, encountering a line containing whitespace with its' first character being 
