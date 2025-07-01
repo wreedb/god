@@ -75,15 +75,11 @@ Data serialization can be better, without being too much.
     + [Booleans](#a-values-booleans)
     + [Null](#a-values-null)
     + [Maps](#a-values-maps)
-      + [Variations](#a-values-maps-variations)
-        + [Contiguous](#a-values-maps-variations)
-        + [Non-contiguous](#a-values-maps-variations)
     + [Lists](#a-values-lists)
     + [Elements](#a-values-elements)
   + [Structure](#a-structure)
     + [Document](#a-structure-document)
     + [Operators](#a-structure-operators)
-      + [Selection](#a-structure-operators-selection)
       + [Termination](#a-structure-operators-termination)
     + [Identifiers](#a-structure-identifiers)
     + [Fields](#a-structure-fields)
@@ -106,7 +102,7 @@ I find myself in a position where I need to write data manually, and many of the
 popular formats make that experience have more friction than it should. 
 For those that may need a data serialization format, but never (or rarely) have 
 to deal directly with the data in its storage format, it may seems like nit-picking; 
-however it becomes different when you find yourself manually writing in these formats.
+however it becomes different when you find yourself manually writing in these formats. 
 
 ---
 <a id="a-background"></a>
@@ -142,47 +138,15 @@ with the goal of being useful to almost any programming language. They are flexi
 ---
 <a id="a-values-strings"></a>
 #### Strings
-These come in two forms: standard and multiline. A standard or regular string is represented by a pair 
-of double quotes with any amount of text inside it.
+A standard or regular string is represented by a pair of double quotes with any amount of text inside it.
 ```nix
 greeting = "Hello, how are you?";
 ```
-Multiline strings are denoted by two pairs of double single-quotes (`'' hi ''`). They 
-represent text that may spans across multiple lines. One subtlety to note, is that the string 
-will be *left justified* to the furthest left line (*indentation-wise*) in the string. Essentially 
-trimmed to the left-most part of the string as its' base. 
+Yog can escape (double) quotes in a regular string using a backslash (`\`) before it. This is the same 
+for line-feeds, carriage returns and tab characters (`\n`,`\r`,`\t`). 
 ```nix
-greeting = ''
-    Hello
-        How are you?
-'';
-### is interpreted as:
-# |Hello
-# |    How are you?
-### rather than:
-# |    Hello
-# |        How are you?
-###
-```
-Yog can escape (double) quotes in a regular string using backslashes (`\`) before the indended character you're escaping  
-```nix
-height = "6'2\"";
-# 6'2"
-```
-Escaping in multiline strings is done with a pair of single quotes, followed by a backslash (`''\`), to escape any character that would otherwise not be allowed within the string.
-```nix
-greeting = ''
-Typically,
-    I greet people by saying ''\"Hey, how are you?''\"
-'';
-# |Typically,
-# |    I greet people by saying "Hey, how are you?"
-greeting-two = ''
-It would be strange if I:
-    greeted people by saying ''\'''\'
-'';
-# |It would be strange if I:
-# |    greeted people by saying ''
+height = "6'2\"\n";
+# 6'2"\n
 ```
 
 ---
@@ -279,51 +243,17 @@ The commonality is the structure of an identifier which is assigned a group of f
 ```
 Some languages allow identifiers being used more than once in their form of a map, 
 with the last occurence determining its' value; However this is not valid in 
-Nix-- and by extension, here.
+Nix - and by extension, here.
 ```nix
 {
     self = {
         name = "Will";
         age = 26;
-        
         # This is an ERROR
         age = 25;
     };
-
-    # this is also an ERROR
-    self.age = 25;
 }
 ```
-
-<a id="a-values-maps-variations"></a>
-##### variations
-Maps can be written in two different ways; *contiguous*, *non-contiguous*:
-
-<a id="a-values-maps-variations-contiguous"></a>
-###### Contiguous
-
-```nix
-{
-    person = {
-        name = "Will";
-        age = 26;
-        friends = null;
-    };
-}
-```
-
-<a id="a-values-maps-variations-non-contiguous"></a>
-###### Non-contiguous
-
-```nix
-{
-    person.name = "Will";
-    person.age = 26;
-    person.friends = null;
-}
-```
-**NOTE**: the two approaches cannot be mixed.
-
 ---
 <a id="a-values-lists"></a>
 #### Lists
@@ -397,27 +327,6 @@ values at any depth. In representation, it is semantically equivalent to a [map]
 <a id="a-structure-operators"></a>
 ### Operators
 
-<a id="a-structure-operators-selection"></a>
-#### Selection operator
-The use of a period (`.`) in an identifier is used to selectively traverse map hierarchy. The part 
-of the identifier prefixing the selection operator is considered a [map](#maps), and the postfix 
-*(or postfixes)* are the [identifiers](#identifiers) of the maps' [fields](#fields).
-```nix
-{
-    # the following:
-    movies = {
-        horror = {
-            period-piece = [
-                "The Witch"
-                "The Lighthouse"
-            ];
-        };
-    };
-    # could also be written as:
-    movies.horror.period-piece = [ "The Witch" "The Lighthouse" ];
-}
-```
-
 <a id="a-structure-operators-termination"></a>
 #### Termination operator
 All fields **must** have a `;` (semicolon) to terminate its' scope.
@@ -435,13 +344,11 @@ Non-quoted string values denoting the *name* or *identity* of a field.
 These are the rules for identifiers:
 ##### Identifiers **MAY NOT**:
 + __contain__ the following symbols
-  + ``% $ @ ! ^ & * " ` ~ + = , ? < > \ / ( ) [ ] { } ;``
-+ __begin__ with the following symbols
-  + `. '`
+  + ``. % $ @ ! ^ & * " ` ~ + = , ? < > \ / ( ) [ ] { } ;``
++ __begin__ with a single quote character (`'`)
 ##### Identifiers **MAY**:
 + contain and be suffixed by (non-paired) single quote characters
 + contain and be suffixed by hyphens and underscores
-+ contain (but not **begin** or **end** with) periods, as the [selection operator](#selection-operator).
 ```nix
 {
     # containing hyphens/underscores
@@ -455,16 +362,6 @@ These are the rules for identifiers:
     # impractical; just for demonstrating capability
     a'b'c'1'2'3 = "do re mi";
     a_-_b-'_'-c'1_2-'3' = { crazy = true; };
-    
-    # the following
-    person.name = "Will";
-    person.age = 26;
-
-    # is equivalent to
-    person = {
-        name = "Will";
-        age = 26;
-    };
 }
 ```
 
@@ -508,7 +405,6 @@ All of the following are considered "whitespace" in a *GOD* file:
 + carriage-return `\r`
 + carriage-return line-feed (CR LF) `\r\n`
 + line-feed carriage-return (LF CR) `\n\r`
-+ record separator (RS) `\036`
 + [comments](#comments)
 
 <a id="a-structure-whitespace-comments"></a>
