@@ -66,6 +66,7 @@ Data serialization can be better, without being too much.
 + [Why?](#a-why)
 + [Background](#a-background)
   + [Benefits](#a-background-benefits)
++ [Implementations](#a-implementations)
 + [Specification](#a-specification)
   + [Values](#a-values)
     + [Strings](#a-values-strings)
@@ -124,7 +125,12 @@ Some of the benefits include:
     + [(neo)vim modelines](https://vim.fandom.com/wiki/Modeline_magic#Examples): `# vim:ft=nix`
   + A very thoroughly written [Emacs mode](https://github.com/nixos/nix-mode)
 
+---
+<a id="a-implementations"></a>
+# Implementations
+- Guile Scheme: [wreedb/guile-god](https://github.com/wreedb/guile-god)
 
+---
 <a id="a-specification"></a>
 # Specification
 
