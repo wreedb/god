@@ -125,6 +125,8 @@ Some of the benefits include:
     + [(neo)vim modelines](https://vim.fandom.com/wiki/Modeline_magic#Examples): `# vim:ft=nix`
   + A very thoroughly written [Emacs mode](https://github.com/nixos/nix-mode)
 
+If you would like to see some sample document files, see the [examples](./example) directory.
+
 ---
 <a id="a-implementations"></a>
 # Implementations
@@ -413,37 +415,35 @@ All of the following are considered "whitespace" in a *GOD* file:
 
 <a id="a-structure-whitespace-comments"></a>
 #### Comments
-In addition to omitting the programming features of Nix, we also ***only*** support one form of comments in __GOD__: _full_ line comments.
+In addition to omitting the programming features of Nix, we **only** support line comments.
 ```nix
-# this is a full line comment
+# this is a comment
 {
-  # this is another full line comment
+  # this is another comment
   # and another one.
-  name = "Will";
+  name = "Will"; # over here too
 }
 ```
 The following comments (which are valid in Nix), are __*NOT*__ valid in *GOD*:
 ```nix
 {
-  name = "Will"; # invalid comment
-  favorite-things = [ "a" "b" "c" /* invalid comment */ 1 2 3 ];
+  name = "Will";
+  favorite-things = [ "a" "b" "c" /* invalid inline comment */ 1 2 3 ];
   friends = [
     /* invalid
        multiline
-       'block' comment
+       block comment
     */
     { name = "Floyd"; }
   ];
 }
 ```
-When parsing *GOD*, encountering a line containing whitespace with its' first character being 
-an *octothorpe* `#`, the remainder of the line is considered whitespace and is ignored.
+When parsing *GOD*, encountering an *octothorpe* `#` (outside of a string) means the remainder of the line is considered whitespace and is ignored.
 
 #### Reasoning
-This was an intentional choice. In the authors' opinion, this can make parsing easier and 
-faster (in terms of performace and development time) for implementations of the spec, without 
-sacrificing usability for those writing the serialized data. Anything that can be conveyed by 
-multiline, inline and sub-line comments can be achieved well enough with full line comments.
+This is just to reduce some complexity when implementing the language, as 
+nothing about block comments can offer wouldn't be able to be acheived with 
+line comments; and inline comments are just... plain *silly*.
 
 ## License
 **GOD** (the specification) is licensed under the the GNU Free Documentation License, version 1.3. 
