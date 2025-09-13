@@ -131,6 +131,7 @@ If you would like to see some sample document files, see the [examples](./exampl
 <a id="a-implementations"></a>
 # Implementations
 - Guile Scheme: [wreedb/guile-god](https://github.com/wreedb/guile-god)
+- Tree-sitter grammar: [wreedb/tree-sitter-god](https://github.com/wreedb/tree-sitter-god)
 
 ---
 <a id="a-specification"></a>
