@@ -1,4 +1,3 @@
-# -*- mode: nix; -*- vim:ft=nix
 {
     string = "normal string";
     special-strings = [

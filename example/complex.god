@@ -1,4 +1,3 @@
-# -*- mode: nix; -*- vim:ft=nix
 {
     name = "Will";
     age = 26;
@@ -13,10 +12,9 @@
             director = "Quinten Tarantino";
         }
     ];
-
     friends = [
         {
-            name = "Ross";
+            name = "Floyd";
             age = 29;
             married = false;
             favorite-movies = [

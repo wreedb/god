@@ -1,4 +1,3 @@
-# -*- mode: nix; -*- vim:ft=nix
 {
     directions = [
         {
@@ -16,6 +15,10 @@
         {
             name = "south";
             cardinal = true;
+        }
+        {
+            name = "down";
+            cardinal = false;
         }
     ];
 }

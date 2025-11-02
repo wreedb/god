@@ -1,8 +1,7 @@
-# -*- mode: nix; -*- vim:ft=nix
 {
     name = "shepherd";
     version = "1.0.5";
-    licensing = [ "GPL-3.0" "GPL-3.0-or-later" ];
+    licensing = [ "GPL-3.0-or-later" ];
     
     links = {
         home = "https://gnu.org/software/shepherd";
