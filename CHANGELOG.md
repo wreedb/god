@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2025 2025 Will Reed <wreed@disroot.org>
+
+SPDX-License-Identifier: GFDL-1.3-or-later
+-->
+
 # Changelog
 
 All notable changes to this project will be documented in this file.

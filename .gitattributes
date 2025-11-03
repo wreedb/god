@@ -1,1 +1,4 @@
+# SPDX-FileCopyrightText: 2025 Will Reed <wreed@disroot.org>
+#
+# SPDX-License-Identifier: GFDL-1.3-or-later
 *.god linguist-language=Nix
