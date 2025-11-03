@@ -1,0 +1,4 @@
+spec/book/
+spec/book
+spec/book/**
+spec/book/*/*

@@ -1,0 +1,27 @@
+/*
+ * SPDX-FileCopyrightText: 2025 Will Reed <wreed@disroot.org>
+ *
+ * SPDX-License-Identifier: GFDL-1.3-or-later
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap');
+
+:root {
+    --mono-font: "JetBrains Mono";
+}
+
+html {
+    font-family: "Roboto Condensed";
+}
+
+.content table {
+    margin-left: 0;
+    margin-right: auto; 
+    
+    text-align: left;
+}
+
+.content table th, 
+.content table td {
+    text-align: left;
+}

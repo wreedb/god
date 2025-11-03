@@ -1,0 +1,18 @@
+[book]
+authors = ["Will Reed"]
+language = "en"
+src = "source"
+title = "God Specification"
+
+[preprocessor]
+
+[preprocessor.admonish]
+command = "mdbook-admonish"
+assets_version = "3.1.0"
+
+[output]
+[output.html]
+additional-css = [
+    "theme/admonish.css",
+    "theme/custom.css"
+]
