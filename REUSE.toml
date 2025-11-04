@@ -14,12 +14,12 @@ SPDX-License-Identifier = "MIT"
 [[annotations]]
 path = "art/*"
 SPDX-FileCopyrightText = "2025 Will Reed <wreed@disroot.org>"
-SPDX-License-Identifier = "CC-BY-4.0"
+SPDX-License-Identifier = "CC-BY-SA-4.0"
 
 [[annotations]]
 path = "spec/theme/favicon.png"
 SPDX-FileCopyrightText = "2025 Will Reed <wreed@disroot.org>"
-SPDX-License-Identifier = "CC-BY-4.0"
+SPDX-License-Identifier = "CC-BY-SA-4.0"
 
 [[annotations]]
 path = "spec/**.md"
