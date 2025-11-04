@@ -21,3 +21,4 @@
     - [Fields](spec/structure/fields.md)
     - [Whitespace](spec/structure/whitespace.md)
     - [Comments](spec/structure/comments.md)
+- [Contact](contact.md)
